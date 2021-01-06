@@ -9,7 +9,6 @@
     "test": "backup"
   },
   "dependencies": {
-    "bcrypt": "^3.0.8",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
@@ -22,7 +21,6 @@
     "mongoose": "^5.9.1",
     "morgan": "~1.9.1",
     "node-notifier": "^6.0.0",
-    "nodemailer": "^6.4.11",
     "request": "^2.88.2",
     "socket.io": "^2.3.0"
   },
