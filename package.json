@@ -2,11 +2,8 @@
   "name": "mongo-bkp",
   "version": "1.0.0",
   "description": "A service to backup mongo database",
-  "main": "app.js",
   "scripts": {
-    "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www",
-    "test": "backup"
+    "start": "node --trace-warnings ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
