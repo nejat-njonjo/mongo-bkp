@@ -1,6 +1,5 @@
 <template>
   <div class="home-page">
-    <BackupForm />
     <v-list
       subheader
       two-line
@@ -31,7 +30,7 @@
             <v-icon color="grey lighten-1">mdi-backup-restore</v-icon>
           </v-btn>
 
-          <BackupForm :database="database.name" v-if="activeDatabase === database.name"/>
+          <BackupForm @close="activeDatabase = null" :database="database.name" v-if="activeDatabase === database.name"/>
         </v-list-item-action>
       </v-list-item>
     </v-list>
