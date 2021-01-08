@@ -1,12 +1,17 @@
 <template>
   <div class="home-page">
-    Home
+    <BackupForm />
   </div>
 </template>
 
 <script>
+import BackupForm from './BackupForm'
+
 export default {
-  name: 'HomeComponent'
+  name: 'HomeComponent',
+  components: {
+    BackupForm
+  }
 }
 </script>
 
