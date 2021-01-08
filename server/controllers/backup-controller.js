@@ -79,9 +79,9 @@ function createBackup({host, port, database}, directory = '') {
         return
       }
 
-      console.log(stdout)
+      const message = directory ? `Saved to ${directory}/${database}` : `Saved to /server/backup/${database}`
 
-      resolve(`Backup to ${directory}/${database}`)
+      resolve({success: true, message})
     })
   })
 }
