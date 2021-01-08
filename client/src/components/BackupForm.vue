@@ -118,7 +118,6 @@ export default {
     async createBackup() {
       this.progress = true
       const response = await BackupService.createBackup(this.backupForm)
-      console.log(response)
       if (response.success) {
         this.message = response.message
         this.progress = false
