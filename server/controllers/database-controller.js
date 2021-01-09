@@ -3,7 +3,10 @@ const db = require('mongoose')
 const url = `mongodb://localhost:27017`
 
 function listDatabases(req, res) {
-  const connection = db.createConnection(url)
+  const connection = db.createConnection(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
   connection.on('open', () => {
     new db.mongo.Admin(connection.db).listDatabases((err, result) => {
       if (err) {
