@@ -3,6 +3,8 @@ const fs = require('fs')
 const db = require('mongoose')
 const path = require('path')
 
+const atlasURI = 'mongodb+srv://dataframe:Mlambe101@mongobkp.waqd2.mongodb.net/'
+
 function loadBuckups(req, res) {
   try {
     res.send('OK')
@@ -55,6 +57,10 @@ function backup(req, res) {
   }
 }
 
+function restore() {
+  childProcess.exec('mongorestore --uri mongodb+srv://dataframe:Mlambe101@mongobkp.waqd2.mongodb.net/ -d store ./server/backup/dreamDataStore')
+}
+
 function createBackup({host, port, database}, directory = '') {
   return new Promise((resolve, reject) => {
     let url = `mongodb://${host}:${port}/${database}`
@@ -79,9 +85,18 @@ function createBackup({host, port, database}, directory = '') {
         return
       }
 
-      const message = directory ? `Saved to ${directory}/${database}` : `Saved to /server/backup/${database}`
+      const restoreCommand = `mongorestore --uri ${atlasURI} -d ${database} ${directory}`
 
-      resolve({success: true, message})
+      childProcess.exec(restoreCommand, (err, stdout, stderr) => {
+        if (err) {
+          res.send(err)
+          return
+        }
+
+        const message = directory ? `Saved to ${directory}/${database}` : `Saved to /server/backup/${database} and saved to Mongo Atlas`
+
+        resolve({ success: true, message })
+      })
     })
   })
 }
