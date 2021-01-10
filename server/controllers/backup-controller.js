@@ -1,4 +1,4 @@
-const childProcess = require('child_process')
+const shell = require('shelljs')
 const fs = require('fs')
 const db = require('mongoose')
 const path = require('path')
@@ -43,6 +43,7 @@ function backup(req, res) {
       })
     } else {
       createBackup({host, port, database}).then(onfullfilled => {
+        console.log(onfullfilled)
         res.send(onfullfilled)
       }).catch(err => {
         res.send({
@@ -55,10 +56,6 @@ function backup(req, res) {
   } catch (error) {
     res.status(403)
   }
-}
-
-function restore() {
-  childProcess.exec('mongorestore --uri mongodb+srv://dataframe:Mlambe101@mongobkp.waqd2.mongodb.net/ -d store ./server/backup/dreamDataStore')
 }
 
 function createBackup({host, port, database}, directory = '') {
@@ -79,25 +76,22 @@ function createBackup({host, port, database}, directory = '') {
     })
     const defaultOutDir = path.resolve(__dirname + '../../backup/')
     const command = `mongodump --db=${database} --out=${directory ? directory : defaultOutDir}`
-    childProcess.exec(command, (err, stdout, stderr) => {
-      if (err) {
-        reject(err)
-        return
-      }
+    const localBackup = shell.exec(command)
 
-      const restoreCommand = `mongorestore --uri ${atlasURI} -d ${database} ${directory}`
+    if (localBackup.code !== 0) {
+      reject({success: true, message: 'Backup not complete'})
+      return
+    }
 
-      childProcess.exec(restoreCommand, (err, stdout, stderr) => {
-        if (err) {
-          res.send(err)
-          return
-        }
+    const restoreCommand = `mongorestore --uri ${atlasURI} --db ${database} ${directory ? directory : defaultOutDir}/${database}`
+    const remoteBackup = shell.exec(restoreCommand)
 
-        const message = directory ? `Saved to ${directory}/${database}` : `Saved to /server/backup/${database} and saved to Mongo Atlas`
+    if (remoteBackup.code !== 0) {
+      reject({ success: true, message: 'Backup not complete' })
+      return
+    }
 
-        resolve({ success: true, message })
-      })
-    })
+    resolve({success: true, message: 'ok'})
   })
 }
 
