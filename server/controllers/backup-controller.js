@@ -91,7 +91,7 @@ function createBackup({host, port, database}, directory = '') {
       return
     }
 
-    resolve({success: true, message: 'ok'})
+    resolve({success: true, message: 'ok'}) 
   })
 }
 
