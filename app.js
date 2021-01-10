@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const cors = require('cors')
 const config = require('./server/config')
+const schedular = require('./server/services/schedular-service')
 
 const app = express()
 app.use(cors())
@@ -21,6 +22,8 @@ app.use(
   })
 )
 app.use(cookieParser())
+
+new schedular('1')
 
 app.use(config.API.baseUrl, config.routes)
 
