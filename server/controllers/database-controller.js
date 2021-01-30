@@ -1,20 +1,64 @@
 const db = require('mongoose')
+const MongoClient = require('mongodb').MongoClient
+const connectionConfig = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}
 
 const url = `mongodb://localhost:27017`
 
-function listDatabases(req, res) {
-  const connection = db.createConnection(url, {
+const getDatabaseList = () => {
+  return new Promise((resolve, reject) => {
+    const connection = db.createConnection(url, connectionConfig)
+
+    connection.on('open', () => {      
+      new db.mongo.Admin(connection.db).listDatabases((err, result) => {
+        if (err) {
+          reject(err)
+        }
+
+        resolve(result.databases)
+      })
+    })
+  })
+}
+
+const outbox = list => {
+  const cols = []
+  for (collection of list) {
+    cols.push(collection.collectionName)
+  }
+
+  return cols
+}
+
+const getDatabaseCollections = databases => {
+  return new Promise((resolve, reject) => {
+    MongoClient.connect(url, connectionConfig, async (err, client) => {
+      const data = []
+      for (const database of databases) {
+        const db = client.db(database.name)
+        const collections = await db.collections()
+        data.push({
+          ...database,
+          collections: outbox(collections)
+        })
+      }
+
+      resolve(data)
+    })
+  })
+}
+
+async function listDatabases(req, res) {
+  MongoClient.connect(url, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-  })
-  connection.on('open', () => {
-    new db.mongo.Admin(connection.db).listDatabases((err, result) => {
-      if (err) {
-        res.status(404).send(err)
-        return
-      }
-      res.send(result)
-    })
+  }, async (err, client) => {
+    const databases = await getDatabaseList()
+    const collections = await getDatabaseCollections(databases)
+
+    res.send(collections)
   })
 }
 
