@@ -23,7 +23,7 @@ app.use(
 )
 app.use(cookieParser())
 
-new schedular('1')
+// new schedular('1')
 
 app.use(config.API.baseUrl, config.routes)
 
