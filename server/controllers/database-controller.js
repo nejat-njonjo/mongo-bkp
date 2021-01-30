@@ -55,10 +55,12 @@ async function listDatabases(req, res) {
     useNewUrlParser: true,
     useUnifiedTopology: true
   }, async (err, client) => {
-    const databases = await getDatabaseList()
-    const collections = await getDatabaseCollections(databases)
+      const outbox = await getDatabaseList()
+      const databases = await getDatabaseCollections(outbox)
 
-    res.send(collections)
+    res.send({
+      databases
+    })
   })
 }
 
