@@ -15,8 +15,9 @@ function loadBuckups(req, res) {
 
 function backup(req, res) {
   try {
-    const {host, port, database, directory} = req.body
+    const {host, port, database, directory, collections} = req.body
 
+    console.log(collections)
     if (!database) {
       res.send({
         error: 'You must provide database name'
