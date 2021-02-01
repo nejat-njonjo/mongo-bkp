@@ -42,6 +42,18 @@
             required
           ></v-text-field>
         </v-col>
+
+        <v-col cols="12" md="4">
+          <div v-for="collection in database.collections" :key="collection">
+            <v-checkbox
+              @change="toggleCollection(collection)"
+              :label="collection"
+              color="red darken-3"
+              :value="collection"
+              hide-details
+            ></v-checkbox>
+          </div>
+        </v-col>
       </v-row>
       <v-row class="footer" v-if="!progress">
         <v-btn
@@ -106,12 +118,13 @@ export default {
       host: null,
       port: null,
       database: null,
-      directory: null
+      directory: null,
+      collections: []
     }
   }),
 
   mounted() {
-    this.backupForm.database = this.database
+    this.backupForm.database = this.database.name
   },
 
   methods: {
@@ -122,6 +135,13 @@ export default {
         this.message = response.message
         this.progress = false
         this.snackbar = true
+      }
+    },
+    toggleCollection(collection) {
+      if (this.backupForm.collections.includes(collection)) {
+        this.backupForm.collections = this.backupForm.collections.filter(col => col !== collection)
+      } else {
+        this.backupForm.collections.push(collection)
       }
     },
     close() {
