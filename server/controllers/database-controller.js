@@ -5,7 +5,11 @@ const connectionConfig = {
   useUnifiedTopology: true
 }
 
-const url = `mongodb://user:pass@127.0.0.1:27017?authSource=admin&w=1`
+const dbUser = ''
+const authPass = ''
+const authSource = ''
+
+const url = `mongodb://${dbUser}:${authPass}@127.0.0.1:27017?authSource=${authSource}&w=1`
 
 const getDatabaseList = () => {
   return new Promise((resolve, reject) => {
