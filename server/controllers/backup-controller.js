@@ -3,7 +3,7 @@ const fs = require('fs')
 const db = require('mongoose')
 const path = require('path')
 
-const atlasURI = 'mongodb+srv://dataframe:Mlambe101@mongobkp.waqd2.mongodb.net/'
+const atlasURI = process.env.ATLAS_URI
 
 function loadBuckups(req, res) {
   try {
