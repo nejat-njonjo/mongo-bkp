@@ -5,9 +5,9 @@ const connectionConfig = {
   useUnifiedTopology: true
 }
 
-const dbUser = ''
-const authPass = ''
-const authSource = ''
+const dbUser = process.env.DB_USER
+const authPass = process.env.DB_PASS
+const authSource = process.env.AUTH_SOURCE
 
 const url = `mongodb://${dbUser}:${authPass}@127.0.0.1:27017?authSource=${authSource}&w=1`
 
