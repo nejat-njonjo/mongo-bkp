@@ -8,5 +8,5 @@ module.exports = {
   atlasUsername: 'dataframe',
   atlasPassword: 'Mlambe101',
   atlasProtocol: 'mongodb+srv',
-  atlasHost: 'mongobkp.waqd2.mongodb.net'
+  atlasHost: process.env.ATLAS_HOST
 }
