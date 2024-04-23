@@ -20,6 +20,10 @@ importScripts(
 workbox.core.setCacheNameDetails({prefix: "client"});
 
 self.addEventListener('message', (event) => {
+  if (!event) {
+    return;
+  }
+
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
